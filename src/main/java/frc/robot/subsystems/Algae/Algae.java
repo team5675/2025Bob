@@ -4,50 +4,54 @@
 
 package frc.robot.subsystems.Algae;
 
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Algae extends SubsystemBase {
   private static Algae AlgaeManipulator;
   
   private SparkMax wheelsMotor;
   private SparkMax axisMotor;
-  private SparkClosedLoopController wheelsPID;
   private SparkClosedLoopController axisPID;
-  private DigitalInput proxSensor;
+  private RelativeEncoder ticksEncoder;
+  private DigitalInput axisHardStop;
+  Trigger axisHardStopTripped;
+ 
 
   public Algae() {
-  //  wheelsMotor = new SparkMax(AlgaeConstants.wheelsID, MotorType.kBrushless);
-  // axisMotor = new SparkMax(AlgaeConstants.axisID, MotorType.kBrushless);
-  //  SparkMaxConfig wheelsConfig = new SparkMaxConfig();
-  //  wheelsConfig.closedLoop
-  //     .p(AlgaeConstants.wheelsP)
-  //     .i(AlgaeConstants.wheelsI)
-  //     .d(AlgaeConstants.wheelsD);
-     // .outputRange(kMinOutput, kMaxOutput);
+    // wheelsMotor = new SparkMax(AlgaeConstants.wheelsID, MotorType.kBrushless);
+    // SparkMaxConfig wheelsConfig = new SparkMaxConfig();
+    // wheelsConfig.smartCurrentLimit(15);
+    
+    axisMotor = new SparkMax(AlgaeConstants.axisID, MotorType.kBrushless);
+    ticksEncoder = axisMotor.getEncoder();
 
     // SparkMaxConfig axisConfig = new SparkMaxConfig();
-    // axisConfig.closedLoop
-    //  .p(AlgaeConstants.axisP)
-    //  .i(AlgaeConstants.axisI)
-    //  .d(AlgaeConstants.axisD);
-  
-    // wheelsPID = wheelsMotor.getClosedLoopController();
- 
-    // axisPID = axisMotor.getClosedLoopController();
+    // axisConfig.smartCurrentLimit(15);
 
-    // wheelsMotor.configure(wheelsConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    axisPID = axisMotor.getClosedLoopController();
+    // axisConfig.closedLoop
+    // .pid(AlgaeConstants.axisP,AlgaeConstants.axisI,AlgaeConstants.axisD)
+    // .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+  
     // axisMotor.configure(axisConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-    // proxSensor = new DigitalInput(0);
+    axisHardStop = new DigitalInput(1);
+    axisHardStopTripped = new Trigger(axisHardStop::get);
+    SmartDashboard.putNumber("Axis Ticks", ticksEncoder.getPosition());
   }
 
   @Override
@@ -55,17 +59,22 @@ public class Algae extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  // public void AxisOut(){
-  //   axisMotor.set(0.2);
-  // }
+  public void AxisOut(){
+    System.out.println("Out");
+    axisPID.setReference(60, ControlType.kPosition);
+  }
 
-  // public void AxisIn(){
-  //   axisMotor.set(-0.2);
-  // }
+  public void AxisIn(){
+    System.out.println("in");
+    axisPID.setReference(0, ControlType.kPosition);
+    //axisHardStopTripped.onTrue(Commands.runOnce(()->ticksEncoder.setPosition(0)));
+  
+  }
 
-  // public void flywheelSpin(double speed){
-  //   wheelsMotor.set(speed);
-  // }
+  public void flywheelSpin(double speed){
+    System.out.println("Spinning Wheel!");
+    wheelsMotor.set(speed);
+  }
 
   public static Algae getInstance(){
     if (AlgaeManipulator == null){

@@ -3,13 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.Algae.Algae;
-import frc.robot.subsystems.Elevator.Elevator;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.Algae.Algae;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,20 +38,23 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverController.povUp().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().runElevator()));
-    driverController.povDown().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().zero()));
-    
-    // driverController.a().whileTrue(Algae.getInstance().run(() -> Algae.getInstance().AxisOut()));
-    // driverController.b().whileTrue(Algae.getInstance().run(() -> Algae.getInstance().AxisIn()));
+    // driverController.povUp().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().runElevator()));
+    // driverController.povDown().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().zero()));
+    // driverController.rightBumper().whileTrue(Climber.getInstance().runOnce(() -> Climber.getInstance().runClaw()));
+    driverController.a().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().AxisOut()));
+    driverController.b().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().AxisIn()));
 
-    //driverController.y().whileTrue(Algae.getInstance().run(() -> Algae.getInstance().flywheelSpin(-0.2)));
-    //driverController.x().whileTrue(Algae.getInstance().run(() -> Algae.getInstance().flywheelSpin(0.2)));
+    // driverController.y().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(-0.2)));
+    // driverController.x().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0.2)));
+
+    // driverController.leftBumper().whileTrue(Coral.getInstance().runOnce(() -> Coral.getInstance().Intake()));
 
   }
 
+}
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-}
+
