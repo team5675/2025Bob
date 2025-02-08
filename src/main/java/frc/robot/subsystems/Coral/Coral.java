@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,8 +30,8 @@ public class Coral extends SubsystemBase {
     SparkMaxConfig motorConfig = new SparkMaxConfig();
     motorConfig.smartCurrentLimit(15);
     motor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-    beamBreak1 = new DigitalInput(0);
-    beamBreak2 = new DigitalInput(1);
+    beamBreak1 = new DigitalInput(1);
+    beamBreak2 = new DigitalInput(4);
 
     bb1Tripped = new Trigger(beamBreak1::get);
     bb2Tripped = new Trigger(beamBreak2::get);
@@ -39,17 +40,16 @@ public class Coral extends SubsystemBase {
 public void Intake(){
   motor.set(1);
 
-  bb1Tripped.onTrue(Commands.runOnce(()->motor.set(0.75)));
-  bb1Tripped.onTrue(Commands.runOnce(()->motor.set(0.5)));
-  bb2Tripped.onTrue(Commands.run(()->
-  bb1Tripped.onFalse(Commands.runOnce(()->motor.set(0)))));
+  bb1Tripped.onFalse(Commands.runOnce(()->motor.set(0.75)));
+  bb2Tripped.onFalse(Commands.runOnce(()->motor.set(0.5)));
+  bb2Tripped.onFalse(Commands.run(()->
+  bb1Tripped.onTrue(Commands.runOnce(()->motor.set(0)))));
 }
-
-
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.getBoolean("1", beamBreak1.get());
+    SmartDashboard.getBoolean("2", beamBreak2.get());
   }
 
   public static Coral getInstance(){

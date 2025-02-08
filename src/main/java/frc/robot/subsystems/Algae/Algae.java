@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 public class Algae extends SubsystemBase {
   private static Algae AlgaeManipulator;
@@ -32,36 +34,38 @@ public class Algae extends SubsystemBase {
  
 
   public Algae() {
-    // wheelsMotor = new SparkMax(AlgaeConstants.wheelsID, MotorType.kBrushless);
-    // SparkMaxConfig wheelsConfig = new SparkMaxConfig();
-    // wheelsConfig.smartCurrentLimit(15);
+    wheelsMotor = new SparkMax(AlgaeConstants.wheelsID, MotorType.kBrushless);
+    SparkMaxConfig wheelsConfig = new SparkMaxConfig();
+    wheelsConfig.smartCurrentLimit(15);
     
-    axisMotor = new SparkMax(AlgaeConstants.axisID, MotorType.kBrushless);
-    ticksEncoder = axisMotor.getEncoder();
+    // axisMotor = new SparkMax(AlgaeConstants.axisID, MotorType.kBrushless);
+    // ticksEncoder = axisMotor.getEncoder();
 
     // SparkMaxConfig axisConfig = new SparkMaxConfig();
     // axisConfig.smartCurrentLimit(15);
 
-    axisPID = axisMotor.getClosedLoopController();
+    // axisPID = axisMotor.getClosedLoopController();
     // axisConfig.closedLoop
     // .pid(AlgaeConstants.axisP,AlgaeConstants.axisI,AlgaeConstants.axisD)
     // .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
   
     // axisMotor.configure(axisConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
-    axisHardStop = new DigitalInput(1);
-    axisHardStopTripped = new Trigger(axisHardStop::get);
-    SmartDashboard.putNumber("Axis Ticks", ticksEncoder.getPosition());
+    // axisHardStop = new DigitalInput(1);
+    // axisHardStopTripped = new Trigger(axisHardStop::get);
+    
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // SmartDashboard.putNumber("Axis Ticks", ticksEncoder.getPosition());
   }
 
   public void AxisOut(){
     System.out.println("Out");
-    axisPID.setReference(60, ControlType.kPosition);
+    axisPID.setReference(200, ControlType.kPosition);
   }
 
   public void AxisIn(){

@@ -2,6 +2,6 @@ package frc.robot.subsystems.Coral;
 
 public class CoralConstants {
     
-    public static final int motorID = 9;
+    public static final int motorID = 11;
 
 }

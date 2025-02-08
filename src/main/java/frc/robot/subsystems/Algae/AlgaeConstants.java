@@ -7,8 +7,8 @@ package frc.robot.subsystems.Algae;
 /** Add your docs here. */
 public final class AlgaeConstants {
 
-    //public static final int wheelsID = 9;
-    public static final int axisID = 10;
+    public static final int wheelsID = 11;
+    // public static final int axisID = 11;
 
     public static final double wheelsP = 0.02;
     public static final double wheelsI = 0;

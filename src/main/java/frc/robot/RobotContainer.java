@@ -6,7 +6,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.Algae.Algae;
+//import frc.robot.subsystems.Algae.Algae;
+import frc.robot.subsystems.Coral.Coral;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,13 +42,16 @@ public class RobotContainer {
     // driverController.povUp().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().runElevator()));
     // driverController.povDown().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().zero()));
     // driverController.rightBumper().whileTrue(Climber.getInstance().runOnce(() -> Climber.getInstance().runClaw()));
-    driverController.a().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().AxisOut()));
-    driverController.b().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().AxisIn()));
+    // driverController.a().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().AxisOut()));
+    // driverCon
 
-    // driverController.y().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(-0.2)));
-    // driverController.x().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0.2)));
+    // Algae
+    // driverController.y().whileTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(-0.2)));
+    // driverController.y().whileFalse(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0)));
+    // driverController.x().whileTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0.2)));
+    // driverController.x().whileFalse(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0)));
 
-    // driverController.leftBumper().whileTrue(Coral.getInstance().runOnce(() -> Coral.getInstance().Intake()));
+    driverController.leftBumper().whileTrue(Coral.getInstance().runOnce(() -> Coral.getInstance().Intake()));
 
   }
 
