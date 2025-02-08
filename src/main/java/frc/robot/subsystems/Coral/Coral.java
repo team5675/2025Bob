@@ -15,14 +15,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.IntakeCommand;
 
 public class Coral extends SubsystemBase {
   public static Coral Coral;
-  SparkMax motor;
-  DigitalInput beamBreak1;
-  DigitalInput beamBreak2;
-  Trigger bb1Tripped;
-  Trigger bb2Tripped;
+  public SparkMax motor;
+  public DigitalInput beamBreak1;
+  public DigitalInput beamBreak2;
+  public Trigger bb1Tripped;
+  public Trigger bb2Tripped;
 
   public Coral() {
     motor = new SparkMax(CoralConstants.motorID, MotorType.kBrushless);
@@ -36,15 +37,6 @@ public class Coral extends SubsystemBase {
     bb1Tripped = new Trigger(beamBreak1::get);
     bb2Tripped = new Trigger(beamBreak2::get);
   }
-
-public void Intake(){
-  motor.set(1);
-
-  bb1Tripped.onFalse(Commands.runOnce(()->motor.set(0.75)));
-  bb2Tripped.onFalse(Commands.runOnce(()->motor.set(0.5)));
-  bb2Tripped.onFalse(Commands.run(()->
-  bb1Tripped.onTrue(Commands.runOnce(()->motor.set(0)))));
-}
 
   @Override
   public void periodic() {

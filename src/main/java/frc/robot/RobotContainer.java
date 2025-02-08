@@ -6,6 +6,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.IntakeCommand;
 //import frc.robot.subsystems.Algae.Algae;
 import frc.robot.subsystems.Coral.Coral;
 
@@ -51,7 +52,7 @@ public class RobotContainer {
     // driverController.x().whileTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0.2)));
     // driverController.x().whileFalse(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0)));
 
-    driverController.leftBumper().whileTrue(Coral.getInstance().runOnce(() -> Coral.getInstance().Intake()));
+    driverController.leftBumper().whileTrue(new IntakeCommand());
 
   }
 
