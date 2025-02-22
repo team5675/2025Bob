@@ -3,11 +3,20 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.Patterns.RainbowPattern;
+import frc.robot.subsystems.LED.Patterns.SolidPattern;
+//import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.Climber.Climber;
 //import frc.robot.subsystems.Algae.Algae;
+//import frc.robot.subsystems.Coral.Coral;
 import frc.robot.subsystems.Coral.Coral;
 
 /**
@@ -23,6 +32,9 @@ public class RobotContainer {
   private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
+   private Joystick m_Ipac_2 = 
+      new Joystick(OperatorConstants.CommandJoystick);
+      JoystickButton print = new JoystickButton(m_Ipac_2, 1);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -44,7 +56,7 @@ public class RobotContainer {
     // driverController.povDown().onTrue(Elevator.getInstance().runOnce(() -> Elevator.getInstance().zero()));
     // driverController.rightBumper().whileTrue(Climber.getInstance().runOnce(() -> Climber.getInstance().runClaw()));
     // driverController.a().onTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().AxisOut()));
-    // driverCon
+    //driverController.a().onTrue(Climber.getInstance().runOnce(() -> Climber.getInstance().runClaw()));
 
     // Algae
     // driverController.y().whileTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(-0.2)));
@@ -52,8 +64,12 @@ public class RobotContainer {
     // driverController.x().whileTrue(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0.2)));
     // driverController.x().whileFalse(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0)));
 
-    driverController.leftBumper().whileTrue(new IntakeCommand());
+    //driverController.leftBumper().whileTrue(new IntakeCommand());
+    print.onTrue(Commands.runOnce(() -> System.out.println("IPAC A BUTTON")));
 
+    driverController.b().onTrue(Commands.runOnce(() -> LED.getInstance().setPattern(RainbowPattern.getScrollingRainbow())));
+    driverController.x().onTrue(Commands.runOnce(() -> LED.getInstance().setPattern(SolidPattern.getSolidPattern(Color.kCrimson))));
+    driverController.a().onTrue(Commands.runOnce(() -> System.out.println(Coral.getInstance().bb1Tripped)));
   }
 
 }
