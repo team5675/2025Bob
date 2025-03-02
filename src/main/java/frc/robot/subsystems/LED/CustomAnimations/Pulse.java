@@ -1,43 +1,47 @@
 package frc.robot.subsystems.LED.CustomAnimations;
 
 import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.LEDAnimation;
 import frc.robot.subsystems.LED.RGB;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 
-public class Pulse {
-    private final LED led;
+public class Pulse implements LEDAnimation {
     private final RGB targetColor;
     private final double minBrightness;
     private final double maxBrightness;
-    private final double pulseCycleTime; // Total time (in seconds) for one full pulse cycle
+    private final double pulseCycleTime;
+    
+    private LED ledSubsystem;
+    private AddressableLEDBuffer buffer;
     private double phase = 0.0;
     private double lastUpdateTime = 0.0;
 
     /**
      * Constructs a pulsing LED animation with custom RGB color.
      *
-     * @param red            The red component of the color (0-255).
-     * @param green          The green component of the color (0-255).
-     * @param blue           The blue component of the color (0-255).
+     * @param target         The target RGB color
      * @param minBrightness  The minimum brightness (0.0 to 1.0) during the pulse cycle.
      * @param maxBrightness  The maximum brightness (0.0 to 1.0) during the pulse cycle.
      * @param pulseCycleTime The total time in seconds for one full pulse cycle.
      */
     public Pulse(RGB target, double minBrightness, double maxBrightness, double pulseCycleTime) {
-        this.led = LED.getInstance();
         this.targetColor = target;
         this.minBrightness = minBrightness;
         this.maxBrightness = maxBrightness;
         this.pulseCycleTime = pulseCycleTime;
-        this.lastUpdateTime = Timer.getFPGATimestamp();
-        led.setManualAnimation(this::update);
     }
 
-    /**
-     * Called periodically by the LED subsystem.
-     * Updates the LED buffer to pulse the entire strip.
-     */
-    public void update() {
+    @Override
+    public void init(LED ledSubsystem) {
+        this.ledSubsystem = ledSubsystem;
+        this.buffer = ledSubsystem.getBuffer();
+        this.lastUpdateTime = Timer.getFPGATimestamp();
+        this.phase = 0.0;
+    }
+
+    @Override
+    public void execute() {
         double now = Timer.getFPGATimestamp();
         double dt = now - lastUpdateTime;
         lastUpdateTime = now;
@@ -52,11 +56,16 @@ public class Pulse {
         double currentBrightness = minBrightness + (maxBrightness - minBrightness) * brightnessFactor;
 
         // Apply the pulsing color to every LED.
-        for (int i = 0; i < led.getBuffer().getLength(); i++) {
+        for (int i = 0; i < buffer.getLength(); i++) {
             int adjustedRed = (int) (targetColor.r * currentBrightness);
             int adjustedGreen = (int) (targetColor.g * currentBrightness);
             int adjustedBlue = (int) (targetColor.b * currentBrightness);
-            led.getBuffer().setRGB(i, adjustedRed, adjustedGreen, adjustedBlue);
+            buffer.setRGB(i, adjustedRed, adjustedGreen, adjustedBlue);
         }
+    }
+
+    @Override
+    public void end() {
+        // Nothing to clean up for this animation
     }
 }

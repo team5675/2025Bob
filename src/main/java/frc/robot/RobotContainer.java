@@ -6,13 +6,17 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.LED.LED;
-import frc.robot.subsystems.LED.Patterns.RainbowPattern;
-import frc.robot.subsystems.LED.Patterns.SolidPattern;
+import frc.robot.subsystems.LED.RGB;
+import frc.robot.subsystems.LED.SetLEDAnimationCommand;
+import frc.robot.subsystems.LED.CustomAnimations.Blink;
+import frc.robot.subsystems.LED.CustomAnimations.Pulse;
+import frc.robot.subsystems.LED.CustomAnimations.ShootingLines;
 //import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Climber.Climber;
 //import frc.robot.subsystems.Algae.Algae;
@@ -32,10 +36,10 @@ public class RobotContainer {
   private final CommandXboxController driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-   private Joystick m_Ipac_2 = 
-      new Joystick(OperatorConstants.CommandJoystick);
-      JoystickButton print = new JoystickButton(m_Ipac_2, 1);
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  //  private Joystick m_Ipac_2 = 
+  //     new Joystick(OperatorConstants.CommandJoystick);
+  //     JoystickButton print = new JoystickButton(m_Ipac_2, 1);
+  // /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
@@ -65,11 +69,16 @@ public class RobotContainer {
     // driverController.x().whileFalse(Algae.getInstance().runOnce(() -> Algae.getInstance().flywheelSpin(0)));
 
     //driverController.leftBumper().whileTrue(new IntakeCommand());
-    print.onTrue(Commands.runOnce(() -> System.out.println("IPAC A BUTTON")));
+   // print.onTrue(Commands.runOnce(() -> System.out.println("IPAC A BUTTON")));
 
-    driverController.b().onTrue(Commands.runOnce(() -> LED.getInstance().setPattern(RainbowPattern.getScrollingRainbow())));
-    driverController.x().onTrue(Commands.runOnce(() -> LED.getInstance().setPattern(SolidPattern.getSolidPattern(Color.kCrimson))));
-    driverController.a().onTrue(Commands.runOnce(() -> System.out.println(Coral.getInstance().bb1Tripped)));
+    driverController.leftTrigger().onTrue(new SetLEDAnimationCommand(new Pulse(new RGB(0, 255, 170), 0.3, 0.9, 0.5)));
+    driverController.rightTrigger().onTrue(new SetLEDAnimationCommand(new Pulse(new RGB(0, 255, 170), 0.5, 0.9, 0.2)));
+    driverController.a().whileTrue(new SetLEDAnimationCommand(new Blink(new RGB(0, 247, 173), 0.5, 0.5)));
+
+    driverController.povUp().onTrue(new SetLEDAnimationCommand(new ShootingLines(new RGB(Color.kCrimson), true, 15, 0.0, 0.0, 0.9, true)));
+  
+    
+    //driverController.a().onTrue(Commands.runOnce(() -> System.out.println(Coral.getInstance().bb1Tripped)));
   }
 
 }
