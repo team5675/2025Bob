@@ -15,13 +15,14 @@ import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.LED.RGB;
 import frc.robot.subsystems.LED.SetLEDAnimationCommand;
 import frc.robot.subsystems.LED.CustomAnimations.Blink;
+import frc.robot.subsystems.LED.CustomAnimations.Glitch;
 import frc.robot.subsystems.LED.CustomAnimations.Pulse;
 import frc.robot.subsystems.LED.CustomAnimations.ShootingLines;
 //import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Climber.Climber;
 //import frc.robot.subsystems.Algae.Algae;
 //import frc.robot.subsystems.Coral.Coral;
-import frc.robot.subsystems.Coral.Coral;
+//import frc.robot.subsystems.Coral.Coral;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -76,9 +77,10 @@ public class RobotContainer {
     driverController.a().whileTrue(new SetLEDAnimationCommand(new Blink(new RGB(0, 247, 173), 0.5, 0.5)));
 
     driverController.povUp().onTrue(new SetLEDAnimationCommand(new ShootingLines(new RGB(Color.kCrimson), true, 15, 0.0, 0.0, 0.9, true)));
+    driverController.povDown().onTrue(new SetLEDAnimationCommand(new Glitch(new RGB(Color.kRed), 5, 0.5, 0.1, 0.3, 1, 0)));
   
     
-    //driverController.a().onTrue(Commands.runOnce(() -> System.out.println(Coral.getInstance().bb1Tripped)));
+    
   }
 
 }

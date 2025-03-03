@@ -65,7 +65,5 @@ public class Alert implements LEDAnimation {
     }
 
     @Override
-    public void end() {
-        // Nothing specific to clean up
-    }
+    public void end() {}
 }

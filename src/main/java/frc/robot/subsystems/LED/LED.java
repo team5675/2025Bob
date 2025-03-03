@@ -5,24 +5,19 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LED extends SubsystemBase {
-    private static final int kPort1 = 0;
-    private static final int kPort2 = 9;
+    private static final int port1 = 0;
     private static final int kLength = 90;
 
     private final AddressableLED led1;
-    //private final AddressableLED led2;
     
     private final AddressableLEDBuffer ledBuffer;
     private LEDAnimation currentAnimation = null;
 
     private LED() {
-        led1 = new AddressableLED(kPort1);
+        led1 = new AddressableLED(port1);
         led1.setLength(kLength);
         led1.start();
-        
-        // led2 = new AddressableLED(kPort2);
-        // led2.setLength(kLength);
-        // led2.start();
+    
         
         ledBuffer = new AddressableLEDBuffer(kLength);
     }
@@ -60,6 +55,10 @@ public class LED extends SubsystemBase {
         
         led1.setData(ledBuffer);
         //led2.setData(ledBuffer);
+    }
+
+    public void stopPattern() {
+        setAnimation(null);
     }
 
     private static LED instance;
